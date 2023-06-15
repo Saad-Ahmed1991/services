@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&display=swap');
+
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto Slab', serif;
+
+
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.scrollbar-style::-webkit-scrollbar {
+  width: 4px;
+  height: 2px;
+}
+
+
+.scrollbar-style::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.scrollbar-style::-webkit-scrollbar-thumb {
+  background-color: #343333;
+  border-radius: 4px;
+}
+
+.scrollbar-style::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+
+.slide-right.slide-in {
+  animation: slideInRight 1s ease forwards;
+}
+
+.slide-left.slide-in {
+  animation: slideInLeft 1s ease forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
