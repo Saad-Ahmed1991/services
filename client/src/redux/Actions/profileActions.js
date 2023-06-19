@@ -26,8 +26,6 @@ export const createProfile = (profile, navigate) => async (dispatch) => {
 
 export const createWorkerProfile =
   (profile, service, navigate) => async (dispatch) => {
-    console.log("profile", profile);
-    console.log("service", service);
     dispatch({ type: "CREATE_WORKER_PROFILE_LOADING" });
     const token = localStorage.getItem("token");
     try {
@@ -90,7 +88,6 @@ export const uploadProfilePicture = (image) => async (dispatch) => {
       }
     );
     dispatch({ type: "UPLOAD_PROFILE_IMAGE_SUCCESS", payload: response.data });
-    dispatch(getProfile());
   } catch (error) {
     console.log(error);
     dispatch({ type: "UPLOAD_PROFILE_IMAGE_FAIL", payload: error });
@@ -114,7 +111,6 @@ export const updateProfile =
         }
       );
       dispatch({ type: "UPDATE_PROFILE_SUCCESS", payload: response.data });
-      dispatch(getProfile());
       setEdit(false);
     } catch (error) {
       console.log("error", error);

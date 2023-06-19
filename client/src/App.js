@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import CreateProfile from "./pages/CreateProfile";
 import Search from "./pages/Search";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function App() {
         <Route element={<CreateProfile />} path="/createprofile" />
         <Route element={<Search />} path="/search" />
         <Route element={<Contact />} path="/contact" />
+        <Route element={<About />} path="/about" />
       </Routes>
     </div>
   );

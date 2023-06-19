@@ -2,9 +2,9 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ImageList from "./ImageList";
+import AlbumsList from "./AlbumsList";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -19,7 +19,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <div>{children}</div>
         </Box>
       )}
     </div>
@@ -47,12 +47,13 @@ export default function AlbumTab() {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", padding: 0 }}>
       <Box
         sx={{
           borderBottom: 1,
           borderColor: "divider",
           width: "100%",
+          padding: 0,
         }}
       >
         <div className="w-full flex items-center justify-center">
@@ -67,10 +68,10 @@ export default function AlbumTab() {
         </div>
       </Box>
       <TabPanel value={value} index={0}>
-        <ImageList />
+        {<ImageList />}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        azdazd
+        {<AlbumsList />}
       </TabPanel>
     </Box>
   );

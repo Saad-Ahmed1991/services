@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import avatar from "../assets/avatar.png";
 import { Rating } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { FaUpload } from "react-icons/fa";
+import { ImCancelCircle } from "react-icons/im";
 import {
   follow,
   getFollowers,
@@ -16,9 +18,10 @@ import { AiOutlineHeart, AiFillCamera } from "react-icons/ai";
 import { LuHeartOff } from "react-icons/lu";
 import FollowersModal from "../componants/FollowersModal";
 import AlbumTab from "../componants/AlbumsTab";
+import { uploadProfilePicture } from "../redux/Actions/profileActions";
 
 const Profile = () => {
-  const [profileImg, setProfileImg] = useState("");
+  const [previewSource, setPreviewSource] = useState(null);
   const [rate, setRate] = useState(0);
   const dispatch = useDispatch();
   const { userid } = useParams();
@@ -28,22 +31,28 @@ const Profile = () => {
   const followers = useSelector((state) => state.serviceReducer.followers);
   const followings = useSelector((state) => state.serviceReducer.followings);
 
-  function convertImageToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-
-      reader.onerror = (error) => {
-        reject(error);
-      };
-
-      reader.readAsDataURL(file);
-    });
-  }
-
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    previewFile(file);
+  };
+  const previewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+      console.log(reader.result);
+    };
+  };
+  const handleProfileImageChange = (e) => {
+    if (!previewSource) return;
+    uploadImage(previewSource);
+    setPreviewSource("");
+    dispatch(getUserService(userid));
+  };
+  //////////////////////////////
+  const uploadImage = async (base64image) => {
+    dispatch(uploadProfilePicture({ profileImg: base64image }));
+  };
   const handleRate = async () => {
     setOpenModal(!openModal);
     dispatch(rateService(service._id, rate, service.user._id));
@@ -59,7 +68,7 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <div className="w-full h-full">
+      <div className="w-full h-full overflow-x-hidden">
         <div className="flex w-full flex-col items-center pt-24 ">
           <div className="w-full relative">
             {currentUser._id === userid ? null : (
@@ -94,14 +103,18 @@ const Profile = () => {
         <div className=" w-full flex flex-col  gap-6 items-center justify-around mt-10 sm:flex-row">
           <div className="relative group">
             <img
-              className="rounded-full h-[250px] w-[250px]"
-              src={service?.profile?.profileImg || avatar}
+              className="rounded-full h-[300px] w-[300px]"
+              src={previewSource || service?.profile?.profileImg || avatar}
               alt=""
             />
-
-            {currentUser._id === userid ? (
+            {currentUser._id === userid && !previewSource ? (
               <>
-                <input className="hidden" id="profilePicture" type="file" />
+                <input
+                  onChange={handleFileInputChange}
+                  className="hidden"
+                  id="profilePicture"
+                  type="file"
+                />
                 <label htmlFor="profilePicture">
                   <div className="hidden group-hover:flex bg-black/50 text-white font-semibold text-lg tracking-wider cursor-pointer absolute top-0 left-0 w-full h-full rounded-full  items-center justify-center">
                     <div className="flex flex-col items-center justify-center">
@@ -111,8 +124,28 @@ const Profile = () => {
                   </div>
                 </label>
               </>
+            ) : currentUser._id === userid && previewSource ? (
+              <>
+                <div className="flex bg-black/50 text-white font-semibold text-lg tracking-wider absolute top-0 left-0 w-full h-full rounded-full  items-center justify-center">
+                  <div className="flex items-center justify-center gap-12 mt-24">
+                    <p
+                      onClick={() => setPreviewSource(null)}
+                      className="cursor-pointer"
+                    >
+                      <ImCancelCircle className="text-red-300" size={50} />
+                    </p>
+                    <p
+                      onClick={() => handleProfileImageChange(previewSource)}
+                      className="cursor-pointer"
+                    >
+                      <FaUpload className="text-green-500" size={50} />
+                    </p>
+                  </div>
+                </div>
+              </>
             ) : null}
           </div>
+
           <div className="w-[70%] sm:w-[30%]">
             <p className="text-lg tracking-widest text-center text-black font-sans font-extrabold">
               Details
@@ -194,6 +227,9 @@ const Profile = () => {
               />
             </div>
           </div>
+
+          {/*album tabs */}
+
           <div className="w-full md:w-[80%]">
             <AlbumTab />
           </div>

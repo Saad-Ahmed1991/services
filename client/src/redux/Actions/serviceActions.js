@@ -6,6 +6,9 @@ import {
   FOLLOW_FAIL,
   FOLLOW_LOADING,
   FOLLOW_SUCCESS,
+  GET_ALBUMS_FAIL,
+  GET_ALBUMS_LOADING,
+  GET_ALBUMS_SUCCESS,
   GET_ALL_SERVICES_FAIL,
   GET_ALL_SERVICES_LOADING,
   GET_ALL_SERVICES_SUCCESS,
@@ -328,5 +331,26 @@ export const getFollowings = (serviceId) => async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch({ type: GET_FOLLOWING_FAIL, payload: error });
+  }
+};
+
+// get albums
+
+export const getAlbums = (userId) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  dispatch({ type: GET_ALBUMS_LOADING });
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/service/albums/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    dispatch({ type: GET_ALBUMS_SUCCESS, payload: response.data });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: GET_ALBUMS_FAIL, payload: error });
   }
 };

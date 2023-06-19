@@ -48,7 +48,7 @@ router.get("/currentservice", isAuth(), async (req, res) => {
 
 router.put("/uploadimages", isAuth(), async (req, res) => {
   const urls = [];
-  const userFolderName = `${req.user.firstName}-${req.user.lastName}`;
+  const userFolderName = `${req.user._id}`;
   // Generate a unique subfolder name based on the current timestamp
   const subfolderName = `upload-${Date.now()}`;
 
@@ -387,6 +387,38 @@ router.get("/following/:serviceid", async (req, res) => {
       .populate("profile", "profileImg")
       .populate("user", "firstName lastName");
     res.send(followingList);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: error.message });
+  }
+});
+
+// get albums names
+
+/*
+router.get("/albums/:username", isAuth(), async (req, res) => {
+  const userName = req.params.username;
+  const userFolderName = `${userName}`;
+
+  try {
+    // Retrieve subfolders (albums) within the user's parent folder
+    const subfolders = await cloudinary.api.sub_folders(userFolderName);
+
+    // Extract the names of the subfolders
+    const albumNames = subfolders.folders.map((folder) => folder.name);
+
+    res.send({ albums: albumNames });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: error.message });
+  }
+});
+*/
+router.get("/albums/:userid", isAuth(), async (req, res) => {
+  const { userid } = req.params;
+  try {
+    const response = await Service.findOne({ user: userid }).select("albums");
+    res.send(response);
   } catch (error) {
     console.log(error);
     res.status(400).send({ error: error.message });

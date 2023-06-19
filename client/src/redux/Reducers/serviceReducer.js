@@ -6,6 +6,9 @@ import {
   FOLLOW_FAIL,
   FOLLOW_LOADING,
   FOLLOW_SUCCESS,
+  GET_ALBUMS_FAIL,
+  GET_ALBUMS_LOADING,
+  GET_ALBUMS_SUCCESS,
   GET_ALL_SERVICES_FAIL,
   GET_ALL_SERVICES_LOADING,
   GET_ALL_SERVICES_SUCCESS,
@@ -44,6 +47,7 @@ const initialState = {
   userService: {},
   followers: [],
   followings: [],
+  albums: [],
   pagination: { page: 1, limit: 10, totalPages: 0, totalCount: 0 },
   searchValues: { profession: "", city: "", rating: 0 },
   loading: false,
@@ -219,6 +223,23 @@ export const serviceReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         loading: true,
+      };
+    case GET_ALBUMS_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_ALBUMS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        albums: payload,
+      };
+    case GET_ALBUMS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
       };
 
     default:

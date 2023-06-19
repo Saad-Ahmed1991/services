@@ -23,7 +23,9 @@ const Card = ({ el }) => {
             fontSize: "1.5rem",
           }}
         />
-        <p>{el.profile?.city}</p>
+        <p className="flex items-center justify-center h-[2rem] w-full flex-col  text-xl font-bold text-gray-300 text-shadow-lg bg-black bg-opacity-50 rounded-sm px-4">
+          {el.profile?.city}
+        </p>
       </div>
       <img
         className=" absolute top-1 left-1 w-[4.5rem] h-[4.5rem] rounded-full border-2 border-black/30"
