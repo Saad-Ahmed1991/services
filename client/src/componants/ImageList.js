@@ -6,7 +6,7 @@ const ImageList = () => {
     (state) => state.serviceReducer.userService.images
   );
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid shadow-gray-500 shadow-2xl grid-cols-2 md:grid-cols-4 gap-4">
       {images?.map((image, i) => (
         <div key={i}>
           <img

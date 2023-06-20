@@ -35,7 +35,7 @@ const AlbumsList = () => {
             key={i}
           >
             <img className="w-48" src={album?.album[0]} alt="" />
-            <div className="hidden group-hover:block absolute text-white text-center bottom-10 tracking-wider w-full text-md bg-black/70 py-3">
+            <div className=" absolute text-white text-center bottom-10 tracking-wider w-full text-md bg-black/70 py-3">
               <p>{album?.title}</p>
               <p>({album?.album.length} photos)</p>
             </div>
@@ -94,7 +94,7 @@ const AlbumsList = () => {
             <p>Albums</p>
           </div>
           <div className="justify-self-end">
-            <UploadImagesModal />
+            <UploadImagesModal albums={albums} />
           </div>
         </div>
         <p className="text-lg mt-1 tracking-widest font-semibold mb-3 w-full bg-gray-300 text-center">
