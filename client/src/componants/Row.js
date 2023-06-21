@@ -43,7 +43,7 @@ const Row = ({ img, index, profession }) => {
   return (
     <div
       ref={rowRef}
-      className={`relative opacity-0 bg-gradient-to-r from-gray-50 to-gray-100 shadow-xl shadow-gray-600 rounded-lg rounded-l-3xl flex items-center gap-6 my-20 flex-col md:flex-row ${
+      className={`relative opacity-0 bg-gradient-to-r from-gray-50 to-gray-100 shadow-xl shadow-gray-600 rounded-lg rounded-l-3xl flex items-center  my-20 flex-col md:flex-row ${
         index % 2 === 0 ? "slide-right" : "slide-left"
       }`}
     >

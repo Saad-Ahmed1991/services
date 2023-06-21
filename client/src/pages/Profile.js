@@ -49,7 +49,7 @@ const Profile = () => {
     setPreviewSource("");
     dispatch(getUserService(userid));
   };
-  //////////////////////////////
+
   const uploadImage = async (base64image) => {
     dispatch(uploadProfilePicture({ profileImg: base64image }));
   };

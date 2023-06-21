@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { HiOutlineMinus } from "react-icons/hi";
 const Carousel = () => {
@@ -27,6 +27,17 @@ const Carousel = () => {
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
+  useEffect(() => {
+    // Auto play the carousel every 3 seconds
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000);
+
+    // Clean up the timer when the component unmounts or currentIndex changes
+    return () => {
+      clearInterval(timer);
+    };
+  }, [currentIndex]);
 
   return (
     <div className="max-w-[1400px] h-[500px] w-full m-auto pt-10 px-4 relative group">

@@ -49,8 +49,11 @@ router.get("/currentservice", isAuth(), async (req, res) => {
 router.put("/uploadimages", isAuth(), async (req, res) => {
   const urls = [];
   const userFolderName = `${req.user._id}`;
-  // Generate a unique subfolder name based on the current timestamp
-  const subfolderName = `upload-${Date.now()}`;
+  let subfolderName = `upload-${Date.now()}`;
+
+  if (req.body.subfolderName) {
+    subfolderName = req.body.subfolderName;
+  }
 
   try {
     // Check if the user's folder exists on Cloudinary
@@ -67,13 +70,21 @@ router.put("/uploadimages", isAuth(), async (req, res) => {
       await cloudinary.api.create_folder(userFolderName);
     }
 
-    // Create a new subfolder inside the user's folder
-    await cloudinary.api.create_folder(`${userFolderName}/${subfolderName}`);
+    // Check if the subfolder already exists inside the user's folder
+    const subfolderExists = await cloudinary.api.sub_folders(userFolderName);
+    const subfolderExistsArr = subfolderExists.folders.filter(
+      (folder) => folder.name === subfolderName
+    );
 
-    for (let i = 0; i < req.body.length; i++) {
-      const imageString = req.body[i];
+    if (subfolderExistsArr.length === 0) {
+      // Create the subfolder inside the user's folder if it doesn't exist
+      await cloudinary.api.create_folder(`${userFolderName}/${subfolderName}`);
+    }
 
-      // Upload the image to the newly created subfolder
+    for (let i = 0; i < req.body.images.length; i++) {
+      const imageString = req.body.images[i];
+
+      // Upload the image to the specified subfolder
       const uploadResponse = await cloudinary.uploader.upload(imageString, {
         folder: `${userFolderName}/${subfolderName}`,
       });
@@ -89,10 +100,21 @@ router.put("/uploadimages", isAuth(), async (req, res) => {
   try {
     const oldService = await Service.findOne({ user: req.user._id });
     oldService.images = [...oldService.images, ...urls];
-    oldService.albums = [
-      ...oldService.albums,
-      { title: subfolderName, album: urls },
-    ];
+
+    let albumExists = false;
+    for (let i = 0; i < oldService.albums.length; i++) {
+      const album = oldService.albums[i];
+      if (album.title === subfolderName) {
+        album.album = [...album.album, ...urls];
+        albumExists = true;
+        break;
+      }
+    }
+
+    if (!albumExists) {
+      oldService.albums.push({ title: subfolderName, album: urls });
+    }
+
     await oldService.save();
     res.send({ msg: "Images successfully added" });
   } catch (error) {

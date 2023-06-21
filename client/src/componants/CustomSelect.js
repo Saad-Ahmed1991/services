@@ -1,18 +1,22 @@
 import Select from "react-select";
 
-const CustomSelect = ({ albums, setAlbumName }) => {
+const CustomSelect = ({ albums, setSubfolderName }) => {
   const options = albums.map((album) => ({
     value: album.title,
     label: (
       <div className="flex items-center">
-        <img src={album.album[0]} alt={album.title} className="w-6 h-6 mr-2" />
-        {album.title}
+        <img
+          src={album.album[0]}
+          alt={album.title}
+          className="w-10 h-10 mr-2"
+        />
+        <p className="text-lg">{album.title}</p>
       </div>
     ),
   }));
 
   const handleChange = (selectedOption) => {
-    setAlbumName(selectedOption.value);
+    setSubfolderName(selectedOption.value);
   };
 
   return (

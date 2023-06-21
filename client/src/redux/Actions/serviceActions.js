@@ -80,29 +80,34 @@ export const getCUrrentService = () => async (dispatch) => {
   }
 };
 
-export const uploadImages = (images) => async (dispatch) => {
-  const token = localStorage.getItem("token");
-  dispatch({ type: "UPLOAD_MULTIPLE_IMAGES_LOADING" });
-  try {
-    const response = await axios.put(
-      "http://localhost:5000/api/service/uploadimages",
-      images,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    dispatch({
-      type: "UPLOAD_MULTIPLE_IMAGES_SUCCESS",
-      payload: response.data,
-    });
-    dispatch(getCUrrentService(token));
-  } catch (error) {
-    console.log(error);
-    dispatch({ type: "UPLOAD_MULTIPLE_IMAGES_FAIL", payload: error });
-  }
-};
+//upload albums
+
+export const uploadImages =
+  (images, subfolderName, userId, setOpen) => async (dispatch) => {
+    const token = localStorage.getItem("token");
+    dispatch({ type: "UPLOAD_MULTIPLE_IMAGES_LOADING" });
+    try {
+      const response = await axios.put(
+        "http://localhost:5000/api/service/uploadimages",
+        { subfolderName, images },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch({
+        type: "UPLOAD_MULTIPLE_IMAGES_SUCCESS",
+        payload: response.data,
+      });
+      setOpen(false);
+      dispatch(getUserService(userId));
+      dispatch(getAlbums(userId));
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: "UPLOAD_MULTIPLE_IMAGES_FAIL", payload: error });
+    }
+  };
 
 //delete image
 
@@ -155,6 +160,7 @@ export const getRowServices = (category) => async (dispatch) => {
   }
 };
 /// get all services
+
 export const getAllService =
   (profession, city, rating, page, limit) => async (dispatch) => {
     dispatch({ type: GET_ALL_SERVICES_LOADING });
@@ -169,7 +175,9 @@ export const getAllService =
       console.log("error", error);
     }
   };
+
 //get user serivce
+
 export const getUserService = (userId) => async (dispatch) => {
   dispatch({ type: GET_USER_SERVICE_LOADING });
   try {
@@ -187,6 +195,7 @@ export const getUserService = (userId) => async (dispatch) => {
 };
 
 //update profession
+
 export const updateProfession = (profession) => async (dispatch) => {
   const token = localStorage.getItem("token");
   dispatch({ type: UPDATE_PROFESSION_LOADING });
@@ -214,7 +223,8 @@ export const updateProfession = (profession) => async (dispatch) => {
   }
 };
 
-///////////////////////////////////////
+// search values
+
 export const searchValues = (profession, city, rating) => async (dispatch) => {
   try {
     dispatch({
@@ -283,6 +293,8 @@ export const unfollow = (userId) => async (dispatch) => {
     });
   }
 };
+
+// rating
 
 export const rateService = (serviceId, rate, userid) => async (dispatch) => {
   const token = localStorage.getItem("token");

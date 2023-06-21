@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getUserService } from "./serviceActions";
 
 //create profile
 
@@ -88,6 +89,7 @@ export const uploadProfilePicture = (image) => async (dispatch) => {
       }
     );
     dispatch({ type: "UPLOAD_PROFILE_IMAGE_SUCCESS", payload: response.data });
+    dispatch(getProfile());
   } catch (error) {
     console.log(error);
     dispatch({ type: "UPLOAD_PROFILE_IMAGE_FAIL", payload: error });
