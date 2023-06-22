@@ -28,7 +28,11 @@ export default function FollowersModal({ title, number, list }) {
       >
         <div className="absolute px-2 pt-16 flex flex-col gap-2 md:flex-row  md:flex-wrap overflow-y-scroll top-[50%] left-[50%] w-[85%] md:w-[75%] md:max-w-[800px] translate-x-[-50%] translate-y-[-50%] h-[40rem] bg-gray-50 bg-opacity-90">
           {list?.map((el, i) => (
-            <Link key={el._id} to={`/profile/${el.user._id}`}>
+            <Link
+              className="m-auto"
+              key={el._id}
+              to={`/profile/${el.user._id}`}
+            >
               <FollowCard
                 firstName={el.user.firstName}
                 lastName={el.user.lastName}

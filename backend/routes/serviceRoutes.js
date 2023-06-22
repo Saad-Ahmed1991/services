@@ -25,7 +25,7 @@ router.post("/addservice", isAuth(), async (req, res) => {
     res.send({ msg: "new service added", newService });
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ error: error.message }]);
   }
 });
 
@@ -40,7 +40,7 @@ router.get("/currentservice", isAuth(), async (req, res) => {
       .populate("profile");
     res.send(currentService);
   } catch (error) {
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -94,7 +94,7 @@ router.put("/uploadimages", isAuth(), async (req, res) => {
     console.log(urls);
   } catch (error) {
     console.log(error);
-    return res.status(400).send({ error: error.message });
+    return res.status(400).send([{ msg: error.message }]);
   }
 
   try {
@@ -116,10 +116,10 @@ router.put("/uploadimages", isAuth(), async (req, res) => {
     }
 
     await oldService.save();
-    res.send({ msg: "Images successfully added" });
+    res.send([{ msg: "Images uploaded successfully" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -136,10 +136,10 @@ router.put("/deleteimage", isAuth(), async (req, res) => {
     );
     await updatedService.save();
 
-    res.send({ msg: "picture deleted" });
+    res.send([{ msg: "picture deleted" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -199,7 +199,7 @@ router.get("/services", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -253,7 +253,7 @@ router.get("/search", async (req, res) => {
       results,
     });
   } catch (error) {
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
     console.log(error);
   }
 });
@@ -269,7 +269,7 @@ router.get("/userservice/:userid", async (req, res) => {
     res.send(service);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -284,10 +284,10 @@ router.put("/updateservice", isAuth(), async (req, res) => {
     if (!service.modifiedCount) {
       return res.status(400).send({ msg: "service already updated" });
     }
-    res.send({ msg: "service updated successfully" });
+    res.send([{ msg: "service updated successfully" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -318,10 +318,10 @@ router.put("/rate", isAuth(), async (req, res) => {
 
     await service.save();
 
-    res.send(service);
+    res.send([{ msg: "user rated successfully" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -343,10 +343,10 @@ router.put("/follow/:userid", isAuth(), async (req, res) => {
       { user: myId },
       { $push: { following: userId } }
     );
-    res.send({ msg: "profile followed" });
+    res.send([{ msg: "you have followed this profile " }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -363,16 +363,16 @@ router.put("/unfollow/:userid", isAuth(), async (req, res) => {
     if (!userService.modifiedCount) {
       return res
         .status(400)
-        .send({ msg: "you already unfollowed this profile" });
+        .send([{ msg: "you already unfollowed this profile" }]);
     }
     const myService = await Service.updateOne(
       { user: myId },
       { $pull: { following: userId } }
     );
-    res.send({ msg: "profile unfollowed" });
+    res.send([{ msg: "you have unfollowed this profile" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 //get service followers
@@ -391,7 +391,7 @@ router.get("/followers/:serviceid", async (req, res) => {
     res.send(followersList);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -411,31 +411,10 @@ router.get("/following/:serviceid", async (req, res) => {
     res.send(followingList);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
-// get albums names
-
-/*
-router.get("/albums/:username", isAuth(), async (req, res) => {
-  const userName = req.params.username;
-  const userFolderName = `${userName}`;
-
-  try {
-    // Retrieve subfolders (albums) within the user's parent folder
-    const subfolders = await cloudinary.api.sub_folders(userFolderName);
-
-    // Extract the names of the subfolders
-    const albumNames = subfolders.folders.map((folder) => folder.name);
-
-    res.send({ albums: albumNames });
-  } catch (error) {
-    console.log(error);
-    res.status(400).send({ error: error.message });
-  }
-});
-*/
 router.get("/albums/:userid", isAuth(), async (req, res) => {
   const { userid } = req.params;
   try {
@@ -443,7 +422,7 @@ router.get("/albums/:userid", isAuth(), async (req, res) => {
     res.send(response);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: error.message });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 

@@ -5,14 +5,13 @@ import { useDispatch } from "react-redux";
 import { getAllService, searchValues } from "../redux/Actions/serviceActions";
 import { Link } from "react-router-dom";
 
-const SearchMenu = ({ setSearchMenu, setShow }) => {
+const SearcNavSearchMenu = ({ setSearchMenu }) => {
   const [rating, setRating] = useState(0);
   const [city, setCity] = useState("");
   const [profession, setProfession] = useState("");
   const dispatch = useDispatch();
   const handleSearch = () => {
     dispatch(searchValues(profession, city, rating));
-    setShow(false);
   };
   const handleReset = () => {
     setRating(0);
@@ -98,4 +97,4 @@ const SearchMenu = ({ setSearchMenu, setShow }) => {
   );
 };
 
-export default SearchMenu;
+export default SearcNavSearchMenu;

@@ -45,13 +45,13 @@ const Profile = () => {
   };
   const handleProfileImageChange = (e) => {
     if (!previewSource) return;
-    uploadImage(previewSource);
+    uploadImage(previewSource, userid);
     setPreviewSource("");
     dispatch(getUserService(userid));
   };
 
-  const uploadImage = async (base64image) => {
-    dispatch(uploadProfilePicture({ profileImg: base64image }));
+  const uploadImage = async (base64image, userid) => {
+    dispatch(uploadProfilePicture({ profileImg: base64image }, userid));
   };
   const handleRate = async () => {
     setOpenModal(!openModal);
@@ -72,30 +72,25 @@ const Profile = () => {
         <div className="flex w-full flex-col items-center pt-24 ">
           <div className="w-full relative">
             {currentUser._id === userid ? null : (
-              <>
-                <div
-                  className="bg-blue-gray-600 cursor-pointer font-semibold text-sm text-white tracking-widest flex items-center justify-center gap-2 px-3 py-2 rounded-3xl absolute top-[-20px] right-3
-                  sm: sm:px-8 sm:py-3 sm:top-0"
-                >
-                  {service?.followers?.indexOf(currentUser?._id) !== -1 ? (
-                    <div
-                      className="flex gap-1 w-30 px-3"
-                      onClick={() => dispatch(unfollow(userid))}
-                    >
-                      <p className="">Unfollow</p>
-                      <LuHeartOff className="text-red-400" size={25} />
-                    </div>
-                  ) : (
-                    <div
-                      className="flex gap-1 w-24 px-3"
-                      onClick={() => dispatch(follow(userid))}
-                    >
-                      <p className="">Follow</p>
-                      <AiOutlineHeart className="text-white " size={25} />
-                    </div>
-                  )}
-                </div>
-              </>
+              <div className="w-full flex justify-end pr-12">
+                {service?.followers?.indexOf(currentUser?._id) !== -1 ? (
+                  <div
+                    className="flex items-center gap-1 w-30 px-3 bg-blue-gray-400  py-2 rounded-lg cursor-pointer font-semibold tracking-wider text-white"
+                    onClick={() => dispatch(unfollow(userid))}
+                  >
+                    <p className="">Unfollow</p>
+                    <LuHeartOff className="text-red-400" size={25} />
+                  </div>
+                ) : (
+                  <div
+                    className="flex items-center gap-1 w-30 px-3 bg-blue-gray-400  py-2 rounded-lg cursor-pointer font-semibold tracking-wider text-white"
+                    onClick={() => dispatch(follow(userid))}
+                  >
+                    <p className="">Follow</p>
+                    <AiOutlineHeart className="text-white " size={25} />
+                  </div>
+                )}
+              </div>
             )}
           </div>
           <h2 className="font-semibold"> {service?.profession}</h2>

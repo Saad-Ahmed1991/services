@@ -24,7 +24,7 @@ router.post("/createprofile", isAuth(), async (req, res) => {
     );
     res.send({ msg: "profile added successfully", newProfile });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -49,7 +49,7 @@ router.post("/createworkerprofile", isAuth(), async (req, res) => {
     console.log(response);
     res.send({ msg: "profile added successfully", newProfile });
   } catch (error) {
-    res.status(400).send("error");
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -62,7 +62,7 @@ router.get("/currentprofile", isAuth(), async (req, res) => {
     }).populate("user");
     res.send(currentProfile);
   } catch (error) {
-    res.status(400).send("error");
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -77,7 +77,7 @@ router.get("/:profileId", isAuth(), async (req, res) => {
     res.send(userProfile);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ msg: error });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -94,12 +94,12 @@ router.put("/uploadprofileimage", isAuth(), async (req, res) => {
       { profileImg: uploadResponse.url }
     ).populate("user");
     if (!updatedProfile.modifiedCount) {
-      return res.status(400).send({ msg: "profile picture already updated" });
+      return res.status(400).send([{ msg: "profile picture already updated" }]);
     }
-    res.send({ msg: "profile image succefully updated" });
+    res.send([{ msg: "profile image succefully updated" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send(error);
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -110,7 +110,7 @@ router.put("/editprofile/:id", isAuth(), async (req, res) => {
   console.log("req.body", req.body);
   const profileToUpdate = await Profile.find({ _id: profileId });
   if (!profileToUpdate.user == req.user._id) {
-    return res.status(401).send({ msg: "unauthorized" });
+    return res.status(401).send([{ msg: "unauthorized" }]);
   }
   try {
     const response = await Profile.updateOne(
@@ -123,12 +123,12 @@ router.put("/editprofile/:id", isAuth(), async (req, res) => {
     );
 
     if (!response.modifiedCount) {
-      return res.status(400).send({ msg: "profile already updated" });
+      return res.status(400).send([{ msg: "profile already updated" }]);
     }
-    res.send({ msg: "profile successfuly updated" });
+    res.send([{ msg: "profile successfuly updated" }]);
   } catch (error) {
     console.log(error);
-    res.status(400).send(error);
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 
@@ -146,7 +146,7 @@ router.get("/workersprofiles", async (req, res) => {
     res.send(workersProfile);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ msg: error });
+    res.status(400).send([{ msg: error.message }]);
   }
 });
 

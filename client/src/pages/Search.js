@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "../componants/Navbar";
 import SearchMenu from "../componants/SearchMenu";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllService } from "../redux/Actions/serviceActions";
+import { getAllService, searchValues } from "../redux/Actions/serviceActions";
 import Card from "../componants/Card";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../componants/LoadingSpinner";
@@ -15,21 +15,20 @@ const Search = () => {
   const servicesArray = useSelector((state) => state.serviceReducer.allService);
   const pagination = useSelector((state) => state.serviceReducer.pagination);
   const loading = useSelector((state) => state.serviceReducer.loading);
-  const searchValues = useSelector(
-    (state) => state.serviceReducer.searchValues
-  );
+  const searchValue = useSelector((state) => state.serviceReducer.searchValues);
+
   const handleClick = (page) => {
     setCurrentPage(page);
-    // Call API to fetch data for the selected page
     dispatch(
       getAllService(
-        searchValues.profession,
-        searchValues.city,
-        searchValues.rating,
+        searchValue.profession,
+        searchValue.city,
+        searchValue.rating,
         page,
         pagination.limit
       )
     );
+    window.scrollTo(0, 0);
   };
   const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -50,9 +49,9 @@ const Search = () => {
       setCurrentPage(nextPage);
       dispatch(
         getAllService(
-          searchValues.profession,
-          searchValues.city,
-          searchValues.rating,
+          searchValue.profession,
+          searchValue.city,
+          searchValue.rating,
           nextPage,
           pagination.limit
         )
@@ -66,9 +65,9 @@ const Search = () => {
       setCurrentPage(previousPage);
       dispatch(
         getAllService(
-          searchValues.profession,
-          searchValues.city,
-          searchValues.rating,
+          searchValue.profession,
+          searchValue.city,
+          searchValue.rating,
           previousPage,
           pagination.limit
         )
@@ -78,24 +77,24 @@ const Search = () => {
   useEffect(() => {
     dispatch(
       getAllService(
-        searchValues.profession,
-        searchValues.city,
-        searchValues.rating,
+        searchValue.profession,
+        searchValue.city,
+        searchValue.rating,
         pagination.page,
         pagination.limit
       )
     );
-  }, [searchValues, dispatch]);
+  }, [searchValue, dispatch]);
 
   return (
-    <div className=" w-full overflow-hidden flex h-full relative">
+    <div className="w-full overflow-hidden flex h-full relative">
       <Navbar />
       {/** main */}
       <div className="flex pt-16">
         <div className="hidden md:block bg-gray-700 p-8 rounded-lg ">
-          <SearchMenu />
+          <SearchMenu setShow={setShow} />
         </div>
-        <div>
+        <div className="">
           <div className="w-full h-full  flex flex-col items-center justify-between">
             <div className="w-full h-full flex items-start justify-start md:overflow-y-hidden  p-4 gap-7 flex-wrap">
               {loading ? (

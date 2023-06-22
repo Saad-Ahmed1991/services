@@ -30,7 +30,6 @@ export default function UploadImagesModal({ albums }) {
   const [error, setError] = React.useState(false);
   const userId = useSelector((state) => state.userReducer.currentUser._id);
   const dispatch = useDispatch();
-  console.log("useriD", userId);
 
   //upload multiple
 

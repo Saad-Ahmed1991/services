@@ -17,20 +17,24 @@ import {
   SIGN_UP_FAIL,
   SIGN_UP_SUCCESS,
 } from "../Consts/userConsts";
+import { setSnackbar } from "./snackbarActions";
 
 //user sign up
 
 export const userSignUp = (newUser, navigate) => async (dispatch) => {
   try {
-    const respose = await axios.post(
+    const response = await axios.post(
       "http://localhost:5000/api/user/signup",
       newUser
     );
-    dispatch({ type: SIGN_UP_SUCCESS, payload: respose.data });
+    dispatch({ type: SIGN_UP_SUCCESS, payload: response.data });
+    dispatch(setSnackbar(true, "success", response.data));
+    console.log("signup", response);
     navigate("/signin");
   } catch (error) {
     console.log(error);
     dispatch({ type: SIGN_UP_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -55,6 +59,7 @@ export const logIn = (user, navigate) => async (dispatch) => {
   } catch (error) {
     console.log("log in response", error);
     dispatch({ type: LOG_IN_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -132,10 +137,13 @@ export const deleteUser = (userId) => async (dispatch) => {
       }
     );
     dispatch({ type: DELETE_USER_SUCCESS, payload: response.data });
+    dispatch(setSnackbar(true, "success", response.data));
+
     dispatch(getAllUsers(token));
   } catch (error) {
     console.log(error);
     dispatch({ type: DELETE_USER_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -153,9 +161,11 @@ export const editUser = (user, id) => async (dispatch) => {
       }
     );
     dispatch({ type: EDIT_USER_SUCCESS, payload: response.data });
+    dispatch(setSnackbar(true, "success", response.data));
     dispatch(getAllUsers(token));
   } catch (error) {
     console.log(error);
     dispatch({ type: EDIT_USER_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };

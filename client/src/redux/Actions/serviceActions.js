@@ -36,6 +36,7 @@ import {
   UPDATE_PROFESSION_SUCCESS,
 } from "../Consts/serviceConsts";
 import { getProfile } from "./profileActions";
+import { setSnackbar } from "./snackbarActions";
 
 //create new service
 
@@ -103,9 +104,11 @@ export const uploadImages =
       setOpen(false);
       dispatch(getUserService(userId));
       dispatch(getAlbums(userId));
+      dispatch(setSnackbar(true, "success", response.data));
     } catch (error) {
       console.log(error);
       dispatch({ type: "UPLOAD_MULTIPLE_IMAGES_FAIL", payload: error });
+      dispatch(setSnackbar(true, "success", error.response.data));
     }
   };
 
@@ -126,9 +129,11 @@ export const deleteImage = (imageUrl) => async (dispatch) => {
     );
     dispatch({ type: DELETE_IMAGE_SUCCESS, payload: response.data });
     dispatch(getCUrrentService(token));
+    dispatch(setSnackbar(true, "info", response.data));
   } catch (error) {
     console.log(error);
     dispatch({ type: DELETE_IMAGE_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -157,6 +162,7 @@ export const getRowServices = (category) => async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch({ type: GET_ROW_SERVICES_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 /// get all services
@@ -173,6 +179,7 @@ export const getAllService =
     } catch (error) {
       dispatch({ type: GET_ALL_SERVICES_FAIL, payload: error });
       console.log("error", error);
+      dispatch(setSnackbar(true, "error", error.response.data));
     }
   };
 
@@ -191,6 +198,7 @@ export const getUserService = (userId) => async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch({ type: GET_USER_SERVICE_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -233,6 +241,7 @@ export const searchValues = (profession, city, rating) => async (dispatch) => {
     });
   } catch (error) {
     console.log(error);
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -255,6 +264,7 @@ export const follow = (userId) => async (dispatch) => {
       type: FOLLOW_SUCCESS,
       payload: response.data,
     });
+    dispatch(setSnackbar(true, "success", response.data));
     dispatch(getUserService(userId));
   } catch (error) {
     console.log(error);
@@ -262,6 +272,7 @@ export const follow = (userId) => async (dispatch) => {
       type: FOLLOW_FAIL,
       payload: error,
     });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -284,6 +295,8 @@ export const unfollow = (userId) => async (dispatch) => {
       type: UNFOLLOW_SUCCESS,
       payload: response.data,
     });
+    dispatch(setSnackbar(true, "success", response.data));
+
     dispatch(getUserService(userId));
   } catch (error) {
     console.log(error);
@@ -291,6 +304,7 @@ export const unfollow = (userId) => async (dispatch) => {
       type: UNFOLLOW_FAIL,
       payload: error,
     });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -310,10 +324,12 @@ export const rateService = (serviceId, rate, userid) => async (dispatch) => {
       }
     );
     dispatch(getUserService(userid));
+    dispatch(setSnackbar(true, "success", response.data));
     dispatch({ type: RATE_USER_SUCCESS, payload: response });
   } catch (error) {
     console.log(error);
     dispatch({ type: RATE_USER_FAIL, payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 

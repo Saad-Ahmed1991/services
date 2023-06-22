@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getUserService } from "./serviceActions";
+import { getCUrrentService, getUserService } from "./serviceActions";
+import { setSnackbar } from "./snackbarActions";
 
 //create profile
 
@@ -75,7 +76,7 @@ export const getProfile = () => async (dispatch) => {
 
 //profile pic upload
 
-export const uploadProfilePicture = (image) => async (dispatch) => {
+export const uploadProfilePicture = (image, userid) => async (dispatch) => {
   dispatch({ type: "UPLOAD_PROFILE_IMAGE_LOADING" });
   const token = localStorage.getItem("token");
   try {
@@ -90,9 +91,12 @@ export const uploadProfilePicture = (image) => async (dispatch) => {
     );
     dispatch({ type: "UPLOAD_PROFILE_IMAGE_SUCCESS", payload: response.data });
     dispatch(getProfile());
+    dispatch(getUserService(userid));
+    dispatch(setSnackbar(true, "success", response.data));
   } catch (error) {
     console.log(error);
     dispatch({ type: "UPLOAD_PROFILE_IMAGE_FAIL", payload: error });
+    dispatch(setSnackbar(true, "error", error.response.data));
   }
 };
 
@@ -114,8 +118,10 @@ export const updateProfile =
       );
       dispatch({ type: "UPDATE_PROFILE_SUCCESS", payload: response.data });
       setEdit(false);
+      dispatch(setSnackbar(true, "success", response.data));
     } catch (error) {
       console.log("error", error);
       dispatch({ type: "UPDATE_PROFILE_FAIL", payload: error });
+      dispatch(setSnackbar(true, "error", error.response.data));
     }
   };

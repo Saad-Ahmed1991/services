@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import SearchDropdown from "./SearchDropdown";
 import Dropdown from "./Dropdown";
@@ -7,12 +7,14 @@ import service_header from "../assets/service_header.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../redux/Actions/userActions";
 import SearchMenu from "./SearchMenu";
+import SearcNavSearchMenu from "./NavSearchMenu";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchMenu, setSearchMenu] = useState(false);
   const [search, setSearch] = useState(false);
   const profile = useSelector((state) => state?.profileReducer?.currentProfile);
+  const navigate = useNavigate();
 
   const handleClose = () => {
     setOpenMenu(false);
@@ -21,6 +23,7 @@ export const Navbar = () => {
   const handleLogout = () => {
     dispatch(logOut());
     setOpenMenu(false);
+    navigate("/");
   };
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
@@ -104,7 +107,7 @@ export const Navbar = () => {
               : "absolute  top-0 left-[-120%] w-full h-screen bg-black bg-opacity-[85%] ease-in duration-500 md:hidden "
           }
         >
-          <div className="flex flex-col items-center text-4xl tracking-widest font-medium  justify-center gap-14 w-full text-white h-full bg-black text bg-opacity-[5%] px-4 relative">
+          <div className="flex flex-col items-center text-4xl tracking-widest font-medium  justify-center gap-10 w-full text-white h-full bg-black text bg-opacity-[5%] px-4 relative">
             {searchMenu ? (
               <div
                 onClick={() => setSearchMenu(false)}
@@ -131,24 +134,24 @@ export const Navbar = () => {
                 >
                   Search
                 </h2>
-                <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
-                  <Link to={`/profile/${profile.user && profile.user._id}`}>
-                    Profile
-                  </Link>
-                </h2>
+                {token ? (
+                  <>
+                    <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
+                      <Link to={`/profile/${profile.user && profile.user._id}`}>
+                        Profile
+                      </Link>
+                    </h2>
+                    <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
+                      <Link to="/settings">Settings</Link>
+                    </h2>
+                  </>
+                ) : null}
                 <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
                   <Link to={`/search`}>Services</Link>
                 </h2>
-                <Link to="/settings">
-                  <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
-                    Settings
-                  </h2>
-                </Link>
-                <Link to="/help">
-                  <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
-                    Help
-                  </h2>
-                </Link>
+                <h2 className="w-[90%] text-center bg-white/5  cursor-pointer rounded-lg py-2">
+                  <Link to="/help">Help</Link>
+                </h2>
                 {token ? (
                   <h2
                     className="w-[90%] text-center bg-white/5 cursor-pointer rounded-lg py-2 "
@@ -169,7 +172,7 @@ export const Navbar = () => {
               </>
             ) : (
               <div className="w-full px-12">
-                <SearchMenu setSearchMenu={setSearchMenu} />
+                <SearcNavSearchMenu setSearchMenu={setSearchMenu} />
               </div>
             )}
           </div>

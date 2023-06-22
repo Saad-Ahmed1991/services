@@ -2,26 +2,27 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "../redux/Actions/userActions";
-import { getProfile } from "../redux/Actions/profileActions";
 import avatar from "../assets/avatar.png";
+import { getProfile } from "../redux/Actions/profileActions";
 
 const Dropdown = ({ setTokenState }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const profile = useSelector((state) => state.profileReducer.currentProfile);
   const [show, setShow] = useState(false);
   const loading = useSelector((state) => state.profileReducer.loading);
   const user = useSelector((state) => state.userReducer.currentUser);
-  const profile = useSelector((state) => state?.profileReducer?.currentProfile);
   const dropdownRef = useRef(null);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProfile());
+  }, [dispatch]);
+
   const logout = () => {
     dispatch(logOut());
     setTokenState(null);
     navigate("/");
   };
-  useEffect(() => {
-    dispatch(getProfile());
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,7 +84,7 @@ const Dropdown = ({ setTokenState }) => {
             </Link>
           ) : user?.hasProfile ? (
             <Link
-              to={`/profile/${profile.user && profile.user._id}`}
+              to={`/profile/${user._id}`}
               className="block font-semibold px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               view profile

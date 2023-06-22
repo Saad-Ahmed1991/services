@@ -11,6 +11,7 @@ import CreateProfile from "./pages/CreateProfile";
 import Search from "./pages/Search";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import SnackBarAlert from "./componants/SnackBarAlert";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function App() {
         <Route element={<Contact />} path="/contact" />
         <Route element={<About />} path="/about" />
       </Routes>
+      <SnackBarAlert />
     </div>
   );
 }
