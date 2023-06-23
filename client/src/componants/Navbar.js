@@ -6,8 +6,8 @@ import Dropdown from "./Dropdown";
 import service_header from "../assets/service_header.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../redux/Actions/userActions";
-import SearchMenu from "./SearchMenu";
 import SearcNavSearchMenu from "./NavSearchMenu";
+import logo from "../assets/logo.png";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -46,8 +46,8 @@ export const Navbar = () => {
         </div>
         <Link to="/">
           <img
-            className="md:hidden lg:block h-10 w-50 hover:scale-105 ease-in duration-200"
-            src={service_header}
+            className="rotation-container md:hidden lg:block h-14 w-50 p-0 m-0 hover:scale-105 ease-in duration-200"
+            src={logo}
             alt=""
           />
         </Link>

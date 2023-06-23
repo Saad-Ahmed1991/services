@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Rating from "@mui/material/Rating";
 import { cities, professions } from "../consts/consts";
 import { useDispatch } from "react-redux";
-import { getAllService, searchValues } from "../redux/Actions/serviceActions";
+import { searchValues } from "../redux/Actions/serviceActions";
 import { Link } from "react-router-dom";
 
 const SearchMenu = ({ setSearchMenu, setShow }) => {
@@ -18,7 +18,7 @@ const SearchMenu = ({ setSearchMenu, setShow }) => {
     setRating(0);
     setCity("");
     setProfession("");
-    dispatch(getAllService("", "", 0));
+    dispatch(searchValues("", "", 0));
   };
 
   return (

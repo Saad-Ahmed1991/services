@@ -3,7 +3,7 @@ import Card from "./Card";
 import { BsArrowRight } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllService } from "../redux/Actions/serviceActions";
+import { searchValues } from "../redux/Actions/serviceActions";
 
 const Row = ({ img, index, profession }) => {
   const rowRef = useRef(null);
@@ -54,7 +54,7 @@ const Row = ({ img, index, profession }) => {
       />
       <Link to="/search">
         <p
-          onClick={() => dispatch(getAllService(profession, "", 0))}
+          onClick={() => dispatch(searchValues(profession, "", 0))}
           className="border-2 cursor-pointer self-end flex bg-gray-200 rounded-3xl w-32 items-center justify-evenly mr-5 md:absolute md:top-[-40px] md:right-4"
         >
           <span>See more</span>

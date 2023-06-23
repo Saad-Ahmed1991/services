@@ -23,6 +23,7 @@ import { uploadProfilePicture } from "../redux/Actions/profileActions";
 const Profile = () => {
   const [previewSource, setPreviewSource] = useState(null);
   const [rate, setRate] = useState(0);
+  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
   const { userid } = useParams();
   const [openModal, setOpenModal] = useState(false);
@@ -71,11 +72,11 @@ const Profile = () => {
       <div className="w-full h-full overflow-x-hidden">
         <div className="flex w-full flex-col items-center pt-24 ">
           <div className="w-full relative">
-            {currentUser._id === userid ? null : (
+            {token && currentUser._id === userid ? null : (
               <div className="w-full flex justify-end pr-12">
                 {service?.followers?.indexOf(currentUser?._id) !== -1 ? (
                   <div
-                    className="flex items-center gap-1 w-30 px-3 bg-blue-gray-400  py-2 rounded-lg cursor-pointer font-semibold tracking-wider text-white"
+                    className="flex items-center gap-1 w-30 px-3 bg-blue-gray-400 py-2 rounded-lg cursor-pointer font-semibold tracking-wider text-white"
                     onClick={() => dispatch(unfollow(userid))}
                   >
                     <p className="">Unfollow</p>
@@ -83,7 +84,7 @@ const Profile = () => {
                   </div>
                 ) : (
                   <div
-                    className="flex items-center gap-1 w-30 px-3 bg-blue-gray-400  py-2 rounded-lg cursor-pointer font-semibold tracking-wider text-white"
+                    className="flex items-center gap-1 w-30 px-3 bg-blue-gray-400 py-2 rounded-lg cursor-pointer font-semibold tracking-wider text-white"
                     onClick={() => dispatch(follow(userid))}
                   >
                     <p className="">Follow</p>
@@ -158,9 +159,15 @@ const Profile = () => {
               <p className="text-lg font-semibold tracking-widest text-gray-600  font-serif pt-2">
                 Phone Number:
               </p>
-              <p className="text-lg tracking-widest text-black font-medium pt-2">
-                {service?.profile?.phoneNumber}
-              </p>
+              {token ? (
+                <p className="text-lg tracking-widest text-black font-medium pt-2">
+                  {service?.profile?.phoneNumber}
+                </p>
+              ) : (
+                <p className="text-lg tracking-widest text-black font-medium pt-2">
+                  {service?.profile?.phoneNumber.toString().slice(0, 4)}****
+                </p>
+              )}
             </div>
             <div className="flex  justify-between py-1">
               <p className=" font-semibold text-lg tracking-widest text-gray-600  font-serif pt-2">
@@ -183,7 +190,7 @@ const Profile = () => {
                 }}
               />
             </div>
-            {userid === currentUser._id ? null : (
+            {token && userid === currentUser._id ? null : (
               <div className="flex cursor-pointer items-center justify-center hover:scale-[1.1] mt-4">
                 <div
                   className="font-semibold"

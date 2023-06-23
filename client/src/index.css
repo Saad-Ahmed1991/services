@@ -67,3 +67,21 @@ code {
     opacity: 1;
   }
 }
+.rotation-container {
+  display: inline-block;
+  animation: rotate 4s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+
+
+
+
