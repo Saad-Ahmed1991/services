@@ -102,13 +102,13 @@ export const getAllWorkers = () => async (dispatch) => {
 
 // get all users
 
-export const getAllUsers = () => async (dispatch) => {
+export const getAllUsers = (page, limit) => async (dispatch) => {
   dispatch({ type: GET_ALL_USERS_LOADING });
 
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      "http://localhost:5000/api/user/allusers",
+      `http://localhost:5000/api/user/allusers?page=${page}&limit=${limit}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,7 +1,12 @@
 import React from "react";
+import Chart from "../componants/Chart";
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <div>
+      <Chart />
+    </div>
+  );
 };
 
 export default Dashboard;

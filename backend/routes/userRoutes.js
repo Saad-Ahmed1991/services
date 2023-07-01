@@ -85,10 +85,26 @@ router.get("/allworkers", async (req, res) => {
 
 router.get("/allusers", isAuth(), isAdmin, async (req, res) => {
   try {
-    const users = await User.find().select(
-      "_id firstName lastName email role isBanned "
-    );
-    res.send(users);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const startIndex = (page - 1) * limit;
+
+    const users = await User.find()
+      .select("_id firstName lastName email role isBanned")
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalCount = await User.countDocuments();
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.send({
+      users,
+      currentPage: page,
+      totalPages,
+      totalCount,
+    });
   } catch (error) {
     res.status(400).send([{ msg: error.message }]);
   }

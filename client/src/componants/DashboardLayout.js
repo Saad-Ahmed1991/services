@@ -12,14 +12,14 @@ const ActiveLink = ({ to, activeClassName, className, ...rest }) => {
   return <NavLink to={to} className={combinedClassName} {...rest} />;
 };
 
-const navLinks = ["users", "help", "products"];
+const navLinks = ["Users", "BillBoard", "Help"];
 
 const DashboardLayout = () => {
   return (
     <div className="w-full h-full">
       <Navbar />
-      <div className="w-full md:flex h-full pt-16 overflow-hidden">
-        <nav className="flex h-20 items-center w-full md:h-screen border-2 border-red-500 font-semibold tracking-wider bg-gray-200 md:w-80">
+      <div className="w-full md:flex h-screen pt-16 overflow-y-auto">
+        <nav className="flex h-20 items-center w-full md:h-full font-semibold tracking-wider bg-gray-200 md:w-80">
           <ul className="flex w-full items-center justify-center h-full text-black tracking-widest text-lg md:flex-col gap-10">
             <ActiveLink
               exact="true"

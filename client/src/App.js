@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./componants/ProtectedRoute";
 import DashboardLayout from "./componants/DashboardLayout";
 import Users from "./pages/Users";
+import BillBoard from "./pages/BillBoard";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function App() {
         <Route element={<DashboardLayout />} path="/dashboard">
           <Route element={<Dashboard />} index />
           <Route element={<Users />} path="/dashboard/users" />
+          <Route element={<BillBoard />} path="/dashboard/billboard" />
         </Route>
       </Routes>
       <SnackBarAlert />
