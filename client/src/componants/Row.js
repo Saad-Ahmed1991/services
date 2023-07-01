@@ -16,7 +16,7 @@ const Row = ({ img, index, profession }) => {
     const options = {
       root: null, // Use the viewport as the root
       rootMargin: "0px", // No margin
-      threshold: 0.2, // Trigger at 10% visibility
+      threshold: 0.2, // Trigger at 20% visibility
     };
 
     const callback = (entries, observer) => {
@@ -43,7 +43,7 @@ const Row = ({ img, index, profession }) => {
   return (
     <div
       ref={rowRef}
-      className={`relative opacity-0 bg-gradient-to-r from-gray-50 to-gray-100 shadow-xl shadow-gray-600 rounded-lg rounded-l-3xl flex items-center  my-20 flex-col md:flex-row ${
+      className={`relative opacity-0 bg-gradient-to-r from-gray-50 to-gray-100 shadow-xl shadow-gray-600 rounded-lg rounded-l-3xl flex items-center  my-20 flex-col md:gap-1 md:flex-row ${
         index % 2 === 0 ? "slide-right" : "slide-left"
       }`}
     >

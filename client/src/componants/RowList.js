@@ -9,12 +9,12 @@ import { getRowServices } from "../redux/Actions/serviceActions";
 import { Link } from "react-router-dom";
 
 const RowList = () => {
-  const rows = [plombier, peintre, electricien, grinder];
+  const rows = [plombier, grinder, peintre, electricien];
   const dispatch = useDispatch();
-  const profession = ["plombier", "forgeron", "transporteur", "mecanicien"];
+  const profession = ["plombier", "forgeron", "peintre", "electricien"];
   useEffect(() => {
     dispatch(
-      getRowServices(["plombier", "forgeron", "transporteur", "mecanicien"])
+      getRowServices(["plombier", "forgeron", "peintre", "electricien"])
     );
   }, []);
 

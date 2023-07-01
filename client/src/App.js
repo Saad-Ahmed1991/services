@@ -11,7 +11,10 @@ import Search from "./pages/Search";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import SnackBarAlert from "./componants/SnackBarAlert";
-import PrivateRoute from "./componants/PrivateRoutes";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./componants/ProtectedRoute";
+import DashboardLayout from "./componants/DashboardLayout";
+import Users from "./pages/Users";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +32,10 @@ function App() {
         <Route element={<Search />} path="/search" />
         <Route element={<Contact />} path="/contact" />
         <Route element={<About />} path="/about" />
+        <Route element={<DashboardLayout />} path="/dashboard">
+          <Route element={<Dashboard />} index />
+          <Route element={<Users />} path="/dashboard/users" />
+        </Route>
       </Routes>
       <SnackBarAlert />
     </div>

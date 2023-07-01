@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import SearchDropdown from "./SearchDropdown";
 import Dropdown from "./Dropdown";
-import service_header from "../assets/service_header.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../redux/Actions/userActions";
 import SearcNavSearchMenu from "./NavSearchMenu";
@@ -13,6 +12,7 @@ export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchMenu, setSearchMenu] = useState(false);
   const [search, setSearch] = useState(false);
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
   const profile = useSelector((state) => state?.profileReducer?.currentProfile);
   const navigate = useNavigate();
 
@@ -83,16 +83,26 @@ export const Navbar = () => {
         ) : null}
         <div className="hidden md:flex items-center justify-center">
           {token ? (
-            <Dropdown setTokenState={setTokenState} />
+            <div className="flex h-full border-l-2 pl-5 items-center justify-center gap-3">
+              <p className="hidden lg:block tracking-wider font-semibold">
+                {currentUser?.firstName?.toLowerCase()}{" "}
+                {currentUser?.lastName?.toLowerCase()}
+              </p>
+              <Dropdown setTokenState={setTokenState} />
+            </div>
           ) : (
-            <div className="flex flex-col items-center">
-              <p>welcome</p>
+            <div className="flex flex-col items-center text-md tracking-widest font-bold">
+              <p className=" h-full border-b-2 border-transparent">welcome</p>
               <div className="flex gap-4">
                 <Link to="/signin">
-                  <p>SignIn</p>
+                  <p className="hover:border-3 h-full cursor-pointer border-b-2 border-transparent hover:border-black hover:scale-110 ease-in duration-200">
+                    SignIn
+                  </p>
                 </Link>
                 <Link to="/signup">
-                  <p>SignUp</p>
+                  <p className="hover:border-3 h-full cursor-pointer border-b-2 border-transparent hover:border-black hover:scale-110 ease-in duration-200">
+                    SignUp
+                  </p>
                 </Link>
               </div>
             </div>

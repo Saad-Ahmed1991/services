@@ -10,7 +10,6 @@ const Dropdown = ({ setTokenState }) => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.profileReducer.currentProfile);
   const [show, setShow] = useState(false);
-  const loading = useSelector((state) => state.profileReducer.loading);
   const user = useSelector((state) => state.userReducer.currentUser);
   const dropdownRef = useRef(null);
 
@@ -75,7 +74,7 @@ const Dropdown = ({ setTokenState }) => {
             </div>
           </Link>
           <hr className="border-gray-200 dark:border-gray-700 " />
-          {user.role === "client" ? (
+          {user.role !== "worker" ? (
             <Link
               to={`/account`}
               className="block font-semibold px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -97,8 +96,16 @@ const Dropdown = ({ setTokenState }) => {
               create profile
             </Link>
           )}
+          {user?.role === "admin" || "superAdmin" ? (
+            <Link
+              to="/dashboard"
+              className="block font-semibold px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+              Dashboard
+            </Link>
+          ) : null}
           <Link
-            to="#"
+            to="/settings"
             className="block font-semibold px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Settings
@@ -106,7 +113,7 @@ const Dropdown = ({ setTokenState }) => {
 
           <hr className="border-gray-200 dark:border-gray-700 " />
           <Link
-            to="#"
+            to="/help"
             className="block font-semibold px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Help
