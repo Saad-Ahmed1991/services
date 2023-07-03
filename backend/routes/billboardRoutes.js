@@ -11,28 +11,26 @@ router.post("/createbillboard", isAuth(), isAdmin, async (req, res) => {
   try {
     const newBillboard = new Billboard({ name: name });
     await newBillboard.save();
-    res.send("billboard created successfully");
+    res.send([{ msg: "Billboard created successfully" }]);
   } catch (error) {
     console.log(error);
     res.status(400).send([{ msg: error.message }]);
   }
 });
 
-// add billboards
+// add images to billboard
 router.put("/addtobillboard", isAuth(), isAdmin, async (req, res) => {
   const image = req.body.image;
+  const billboardId = req.body.billboardId;
   try {
     const uploadResponse = await cloudinary.uploader.upload(image, {
-      folder: `billboard`,
+      folder: `billboard_${billboardId}`,
     });
-    const currentBillboard = await Billboard.find();
+    const oldBillboard = await Billboard.findOne({ _id: billboardId });
     const updateBillboard = await Billboard.updateOne(
-      { _id: currentBillboard[0]._id },
+      { _id: billboardId },
       {
-        billboard: [
-          ...currentBillboard[0].billboard,
-          uploadResponse.secure_url,
-        ],
+        billboard: [...oldBillboard.billboard, uploadResponse.secure_url],
       }
     );
 
@@ -43,7 +41,7 @@ router.put("/addtobillboard", isAuth(), isAdmin, async (req, res) => {
   }
 });
 
-//get billboards
+//get all billboards
 
 router.get("/allbillboards", async (req, res) => {
   try {
@@ -55,4 +53,35 @@ router.get("/allbillboards", async (req, res) => {
   }
 });
 
+//select home billboard
+
+router.put("/selecthomebillboard/:id", isAuth(), isAdmin, async (req, res) => {
+  const billboardId = req.params.id;
+  try {
+    const response = await Billboard.updateMany(
+      { selected: true },
+      { selected: false }
+    );
+    const selectedbillboard = await Billboard.findOneAndUpdate(
+      { _id: billboardId },
+      { selected: true }
+    );
+    res.send([
+      { msg: `${selectedbillboard.name} has been selected for home page` },
+    ]);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send([{ msg: error.message }]);
+  }
+});
+// get selected billboard
+router.get("/homebillboard", async (req, res) => {
+  try {
+    const response = await Billboard.findOne({ selected: true });
+    res.send(response);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send([{ msg: error.message }]);
+  }
+});
 module.exports = router;
